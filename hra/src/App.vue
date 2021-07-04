@@ -1,0 +1,74 @@
+<template>
+  <div id="app">
+    <template v-if="isLogin">
+      <section class="h-100 sm-nav">
+        <div class="nav-menu-block">
+          <a href="javascript:void(0)" @click="toggleMenu()">
+            <i class="fa fa-bars fa-lg"></i>
+          </a>
+        </div>
+        <div class="menu-logo-block">
+          <img src="@/assets/images/hrm-logo.png" alt="hrm logo" />
+        </div>
+        <a href="javascript:void(0)" class="sm-nav-item" :class="selected_menu == 'branch' ? 'selected' : ''" @click="clickMenu('branch')">
+          <i class="fa fa-briefcase"></i><span>Branch</span>
+        </a>
+        <a href="javascript:void(0)" class="sm-nav-item" :class="selected_menu == 'department' ? 'selected' : ''" @click="clickMenu('department')">
+          <i class="fa fa-building"></i><span>Department</span>
+        </a>
+        <a href="javascript:void(0)" class="sm-nav-item" :class="selected_menu == 'employee' ? 'selected' : ''" @click="clickMenu('employee')">
+          <i class="fa fa-user"></i><span>Employee</span>
+        </a>
+        <div class="nav-bottom">
+          <div class="sm-nav-item">
+            <i class="fa fa-sign-out"></i><span>Logout</span>
+          </div>
+        </div>
+      </section>
+      <section class="h-100 sm-body">
+        <router-view />
+      </section>
+    </template>
+    <router-view v-else />
+  </div>
+</template>
+<script>
+export default {
+  data() {
+    return {
+      isLogin: false,
+      selected_menu: '',
+    };
+  },
+  methods: {
+    toggleMenu() {
+      if (document.querySelector(".sm-nav").style.left == 0) {
+        document.querySelector(".sm-nav").style.left = "-15rem";
+        document.querySelector(".sm-body").style.left = "0rem";
+      } else {
+        document.querySelector(".sm-nav").removeAttribute("style");
+        document.querySelector(".sm-body").removeAttribute("style");
+      }
+    },
+    clickMenu(key) {
+      if(this.selected_menu != key) {
+        this.selected_menu = key;
+        this.$router.push('/'+key); 
+      } 
+    }
+  },
+  created() {
+    this.isLogin = this.$cookies.isKey("login") && this.$cookies.get("login") ? true : false;
+    if(this.isLogin) {
+      this.$router.push('/home');
+    }
+    else {
+      this.$router.push('/');
+    }
+  }
+};
+</script>
+<style>
+@import "./assets/css/basic.css";
+@import "./assets/vendor/font-awesome/css/font-awesome.min.css";
+</style>
