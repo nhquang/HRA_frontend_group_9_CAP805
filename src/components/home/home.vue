@@ -9,7 +9,7 @@
     </div>
     <div class="sm-page-body">
       <div class="col-lg-6 col-xl-4 col-md-6 col-sm-12 p-0">
-        <div class="row sm-page-block mx-2">
+        <div class="row sm-page-block">
           <div class="title">Account Info</div>
           <div class="col-12 mb-2 px-2">
             <label class="req">Username</label>
