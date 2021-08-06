@@ -20,9 +20,9 @@
           <i class="fa fa-user"></i><span>Employee</span>
         </a>
         <div class="nav-bottom">
-          <div class="sm-nav-item">
+          <a href="javascript:void(0)" class="sm-nav-item" @click="logout()">
             <i class="fa fa-sign-out"></i><span>Logout</span>
-          </div>
+          </a>
         </div>
       </section>
       <section class="h-100 sm-body">
@@ -30,6 +30,7 @@
       </section>
     </template>
     <router-view v-else />
+    <div class="loading" v-if="$store.state.loading"></div>
   </div>
 </template>
 <script>
@@ -55,16 +56,30 @@ export default {
         this.selected_menu = key;
         this.$router.push('/'+key); 
       } 
+    },
+    logout() {
+      this.$cookies.remove("_l_hrm");
+      this.$cookies.remove("_t_hrm");
+      window.location.reload();
     }
   },
   created() {
-    this.isLogin = this.$cookies.isKey("login") && this.$cookies.get("login") ? true : false;
+    this.isLogin = this.$cookies.isKey("_l_hrm") && this.$cookies.get("_l_hrm") && this.$cookies.isKey("_t_hrm") ? true : false;
     if(this.isLogin) {
       this.$router.push('/home');
     }
     else {
       this.$router.push('/');
     }
+  },
+  mounted() {
+    this.$root.$on('bv::modal::shown', () => {  
+        var el = document.querySelectorAll('.btn-alert').length - 1;
+        var focusElement = document.querySelectorAll('.btn-alert')[el];
+        setTimeout(() => {
+            focusElement.focus();
+        },0)
+    });
   }
 };
 </script>
