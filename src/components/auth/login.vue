@@ -7,14 +7,14 @@
             <img src="@/assets/images/hrm-logo.png" />
           </div>
           <div class="col-12">
-            <label>Email address</label>
-            <input type="email" />
+            <label>Username</label>
+            <input type="text" id="username" v-model="username"/>
           </div>
           <div class="col-12">
             <label>Password</label>
-            <input type="password" />
+            <input type="password" id="password" v-model="password"/>
           </div>
-          <a href="" class="link">Forgot your password?</a>
+          <a href="javascript:void(0)" class="link ml-auto mr-3" @click="$router.push('/forgot_password')">Forgot your password?</a>
           <div class="col-12">
             <button class="full-button" @click="login()">LOGIN</button>
           </div>
@@ -28,11 +28,53 @@
   </div>
 </template>
 <script>
+import { formValidation } from '@/helper/form_validation';
+import axios from 'axios';
 export default {
+  mixins: [formValidation],
+  data() {
+    return {
+      username: '', password: ''
+    }
+  },
+  validators: {
+    username(value) { 
+      return this.validator.value(value).required(this.required('Username')); 
+    },
+    password(value) {
+      return this.validator.value(value).required(this.required('Password')); 
+    },
+  }, 
   methods: {
-    login() {
-      this.$cookies.set("login", true);
-      window.location.reload();
+    async login() {
+      this.resetFormError();
+      this.$validate();
+      if(this.validation.errors.length == 0) {
+        try {
+          this.$store.state.loading = true;
+          var data = {
+            username: this.username,
+            password: this.password
+          }
+          var response = await axios.post(this.$store.state.apiUrl+'/authenticate/login', data);
+          if(response.data.hasOwnProperty('token')) {
+            this.$cookies.set("_t_hrm", response.data.token);
+            this.$cookies.set("_r_hrm", response.data.role);
+            this.$cookies.set("_l_hrm", true);
+            window.location.reload();
+          }
+          else {
+            this.$toaster(response.data.message, 'danger');
+          }
+          this.$store.state.loading = false;
+        }
+        catch(error) {
+          this.$errorHandling(error);
+        }
+      }
+      else {
+        this.tooltipError();
+      }
     }
   }
 }

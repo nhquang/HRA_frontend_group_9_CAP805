@@ -30,43 +30,17 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td class="text-center">1</td>
-              <td>Headquarter</td>
-              <td>Toronto</td>
-              <td>Ontario</td>
-              <td>Canada</td>
-              <td>HQ</td>
-              <td class="text-end">
-                <a href="javascript:void(0)" class="px-2 text-success" @click="editBranch()">Edit</a>
+            <tr v-for="(item, index) in list" :key="index">
+              <td class="text-center">{{ index + 1 }}</td>
+              <td>{{ item.name }}</td>
+              <td>{{ item.city }}</td>
+              <td>{{ item.province }}</td>
+              <td>{{ item.country }}</td>
+              <td>{{ item.description }}</td>
+              <td class="text-right">
+                <a href="javascript:void(0)" class="px-2 text-success" @click="editBranch(item._id)">Edit</a>
                 <span>|</span>                
-                <a href="javascript:void(0)" class="px-2 text-danger">Delete</a>
-              </td>
-            </tr>          
-            <tr>
-              <td class="text-center">2</td>
-              <td>Branch 1</td>
-              <td>Niagara Falls</td>
-              <td>Ontario</td>
-              <td>Canada</td>
-              <td>branch 1</td>
-              <td class="text-end">
-                <a href="javascript:void(0)" class="px-2 text-success" @click="editBranch()">Edit</a>
-                <span>|</span>                
-                <a href="javascript:void(0)" class="px-2 text-danger">Delete</a>
-              </td>
-            </tr>          
-            <tr>
-              <td class="text-center">3</td>
-              <td>Branch 2</td>
-              <td>Wilkes Barre</td>
-              <td>Pennsylvania</td>
-              <td>United States</td>
-              <td>branch 2</td>
-              <td class="text-end">
-                <a href="javascript:void(0)" class="px-2 text-success" @click="editBranch()">Edit</a>
-                <span>|</span>                
-                <a href="javascript:void(0)" class="px-2 text-danger">Delete</a>
+                <a href="javascript:void(0)" class="px-2 text-danger" @click="deleteBranch(item._id, index)">Delete</a>
               </td>
             </tr>          
           </tbody>
@@ -76,13 +50,59 @@
   </div>
 </template>
 <script>
+import axios from 'axios';
 export default {
+  data() {
+    return {
+      list: [],
+    }
+  },
   methods: {
     addBranch() {
       this.$router.push('/branch/add');
     },
-    editBranch() {
-      this.$router.push('/branch/edit');
+    editBranch(id) {
+      this.$router.push('/branch/edit/'+id);
+    },
+    async deleteBranch(id, index) {
+      var confirm = await this.$confirm('Are you sure to delete?');
+      if(confirm) { 
+        try {
+          this.$store.state.loading = true;
+          var response = await axios.delete(this.$store.state.apiUrl+'/branches/delete_branch/'+id, {
+            headers: {
+              Authorization: 'Bearer '+ this.$cookies.get('_t_hrm')
+            }
+          });
+          if(response.hasOwnProperty('data')) {
+            if(response.data.hasOwnProperty('message') && response.data.message != '') {
+              this.$toaster(response.data.message);
+            }
+            this.$delete(this.list, index);
+          }
+          this.$store.state.loading = false;
+        }
+        catch(error) {
+          this.$errorHandling(error);
+        }
+      }
+    }
+  },
+  async created() {
+    try {
+      this.$store.state.loading = true;
+      var response = await axios.get(this.$store.state.apiUrl+'/branches', {
+        headers: {
+          Authorization: 'Bearer '+ this.$cookies.get('_t_hrm')
+        }
+      });
+      if(response.hasOwnProperty('data')) {
+        this.list = response.data;
+      }
+      this.$store.state.loading = false;
+    }
+    catch(error) {
+      this.$errorHandling(error);
     }
   }
 }

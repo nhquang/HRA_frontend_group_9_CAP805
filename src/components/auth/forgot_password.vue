@@ -19,15 +19,7 @@
             <input type="password" id="confirmPassword" v-model="confirmPassword"/>
           </div>
           <div class="col-12">
-            <label>Activation Code</label>
-            <input type="text" id="activationCode" v-model="activationCode"/>
-          </div>
-          <div class="col-12">
-            <button class="full-button" @click="register()">REGISTER</button>
-          </div>
-          <div class="col-12 text-center py-3">
-            You have an account?
-            <a href="/">Login</a>
+            <button class="full-button" @click="register()">UPDATE</button>
           </div>
         </div>
       </div>
@@ -46,7 +38,7 @@ export default {
   },
   validators: {
     username(value) { 
-      return this.validator.value(value).required(this.required('Email')).email().minLength(5, this.minLength('Email', 5)).maxLength(100, this.maxLength('Email', 100)); 
+      return this.validator.value(value).required(this.required('username')); 
     },
     password(value) {
       return this.validator.value(value).required(this.required('Password')); 
@@ -54,10 +46,6 @@ export default {
     'confirmPassword, password'(confirm_password, password) { 
       return this.validator.value(confirm_password).required(this.required('Confirm Password')).match(password, this.match('Password'));
     },
-    activationCode(value) {
-      return this.validator.value(value).required(this.required('Activation Code')); 
-
-    }
   },   
   methods: {
     async register() {
@@ -70,7 +58,6 @@ export default {
             username: this.username,
             password: this.password,
             confirmPassword: this.confirmPassword,
-            activationCode: this.activationCode
           }
           var response = await axios.post(this.$store.state.apiUrl+'/register', data);
           if(response.hasOwnProperty('message')) {
