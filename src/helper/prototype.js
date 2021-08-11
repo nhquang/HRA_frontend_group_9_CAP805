@@ -82,3 +82,51 @@ Vue.prototype.$errorHandling = function(error) {
 	}
 	this.$store.state.loading = false;
 }
+
+
+// Vue.prototype.$apiPost = async function(url, data) {
+// 	if(this.$cookies.isKey('_t_hrm')) {
+// 		let headers = {
+// 			Authorization: 'Bearer '+ this.$cookies.get('_t_hrm')
+// 		};
+// 		try {
+// 			var response = await axios.post(this.$store.state.apiUrl+url, data, { headers: headers });
+// 			if(response.status == 200 && response.status == 201) {
+// 				if(response.data.hasOwnProperty('token')) {
+// 					this.$cookies.set("_t_hrm", response.data.token);
+// 					this.$cookies.set("_l_hrm", true);
+// 					window.location.reload();
+// 				  }
+// 				return response.data;
+// 			}
+// 		}
+// 		catch(error) {
+// 			if(error.response) {
+// 				if(error.response.status == 400 || error.response.status == 404) {  
+// 					if(error.response.data.hasOwnProperty('message') && error.response.data.message != '') {
+// 						this.$toaster(error.response.data.message, 'danger');
+// 					}
+// 					error.response.erros.forEach(item => {
+// 						if(document.querySelector('#'+item.param) != null) {
+// 							tippy(document.querySelector('#'+item.param), {content: item.msg, maxWidth: '13rem', trigger: 'focus focusin mouseenter'});
+// 							document.querySelector('#'+item.param).classList.add('error');
+// 						}
+// 						else {
+// 							this.$toaster(item.msg, 'danger');
+// 						}
+// 					});
+// 				}
+// 				else if(error.response.status == 401) {
+// 					this.$cookies.remove("_l_hrm");
+// 					this.$cookies.remove("_t_hrm");
+// 					window.location.reload();
+// 				}
+// 			}
+// 		}
+// 	}
+// 	else {
+// 		this.$cookies.remove("_l_hrm");
+// 		this.$cookies.remove("_t_hrm");
+// 		window.location.reload();
+// 	}
+// }

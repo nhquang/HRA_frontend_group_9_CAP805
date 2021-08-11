@@ -277,7 +277,7 @@ export default {
         await this.getDepartmentDetails(response.data.deparmentId);
         await this.getDepartment();        
         
-        this.activationCode=response.data.activationCode;
+        this.activationCode=response.data.username;
         this.fname=response.data.fname;
         this.lname=response.data.lname; 
         this.gender=response.data.gender;

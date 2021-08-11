@@ -59,6 +59,7 @@ export default {
           var response = await axios.post(this.$store.state.apiUrl+'/authenticate/login', data);
           if(response.data.hasOwnProperty('token')) {
             this.$cookies.set("_t_hrm", response.data.token);
+            this.$cookies.set("_r_hrm", response.data.role);
             this.$cookies.set("_l_hrm", true);
             window.location.reload();
           }

@@ -57,7 +57,7 @@ p { margin: 0rem !important; line-height: 1rem; }
     background-color: #202323; height: 100%; scroll-behavior: auto; width: 15rem; position: relative; transition: left 400ms; left: 0;
 }
 .menu-logo-block { border-bottom: 1px solid #262b2b; padding: 1rem 1rem; }
-.menu-logo-block>img { max-width: 12rem; }
+.menu-logo-block img { max-width: 12rem; }
 .sm-nav-item { 
     position: relative; padding: 0.8rem 0.8rem 0.8rem 3rem; color: #c5c5c5 !important; display: flex; font-size: 1.1rem; line-height: 1.3em; border-bottom: 1px solid #262b2b; text-decoration: none !important; 
 }
@@ -68,6 +68,8 @@ p { margin: 0rem !important; line-height: 1rem; }
 .nav-menu-block>a { color: #666666 !important; height: 100%; width: 100%; display: flex; }
 .nav-menu-block>a>i { margin: auto; }
 
+.sm-home-title-block { text-align: center; font-size: 1.5rem; color:#41669b; border: 1px solid #e2e2e2; 
+    border-top-right-radius: 5px; border-bottom-right-radius: 5px; padding: 2rem; background-color: #ffffff; border-left: 4px solid #41669b; }
 
 .sm-body { position: absolute; top: 0rem; left: 15rem; bottom: 0rem; right: 0rem; overflow: hidden; transition: left 400ms;  }
 .sm-page { position: relative; height: 100vh; }

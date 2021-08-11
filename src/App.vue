@@ -8,15 +8,17 @@
           </a>
         </div>
         <div class="menu-logo-block">
-          <img src="@/assets/images/hrm-logo.png" alt="hrm logo" />
-        </div>
-        <a href="javascript:void(0)" class="sm-nav-item" :class="selected_menu == 'branch' ? 'selected' : ''" @click="clickMenu('branch')">
+          <a href="javascript:void(0)" @click="clickMenu('home')">
+            <img src="@/assets/images/hrm-logo.png" alt="hrm logo"/>
+          </a>
+        </div>        
+        <a href="javascript:void(0)" class="sm-nav-item" :class="selected_menu == 'branch' ? 'selected' : ''" @click="clickMenu('branch')" v-if="role == 'admin'">
           <i class="fa fa-briefcase"></i><span>Branch</span>
         </a>
-        <a href="javascript:void(0)" class="sm-nav-item" :class="selected_menu == 'department' ? 'selected' : ''" @click="clickMenu('department')">
+        <a href="javascript:void(0)" class="sm-nav-item" :class="selected_menu == 'department' ? 'selected' : ''" @click="clickMenu('department')" v-if="role == 'admin'">
           <i class="fa fa-building"></i><span>Department</span>
         </a>
-        <a href="javascript:void(0)" class="sm-nav-item" :class="selected_menu == 'employee' ? 'selected' : ''" @click="clickMenu('employee')">
+        <a href="javascript:void(0)" class="sm-nav-item" :class="selected_menu == 'employee' ? 'selected' : ''" @click="clickMenu('employee')" v-if="role != 'employee'">
           <i class="fa fa-user"></i><span>Employee</span>
         </a>
         <div class="nav-bottom">
@@ -39,6 +41,7 @@ export default {
     return {
       isLogin: false,
       selected_menu: '',
+      role:'',
     };
   },
   methods: {
@@ -60,12 +63,14 @@ export default {
     logout() {
       this.$cookies.remove("_l_hrm");
       this.$cookies.remove("_t_hrm");
+      this.$cookies.remove("_r_hrm");
       window.location.reload();
     }
   },
   created() {
-    this.isLogin = this.$cookies.isKey("_l_hrm") && this.$cookies.get("_l_hrm") && this.$cookies.isKey("_t_hrm") ? true : false;
+    this.isLogin = this.$cookies.isKey("_l_hrm") && this.$cookies.get("_l_hrm") && this.$cookies.isKey("_r_hrm") && this.$cookies.isKey("_t_hrm") ? true : false;
     if(this.isLogin) {
+      this.role = this.$cookies.get('_r_hrm');      
       this.$router.push('/home');
     }
     else {

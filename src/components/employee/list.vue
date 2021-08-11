@@ -99,7 +99,7 @@ export default {
   async created() {
     try {
       this.$store.state.loading = true;
-      var response = await axios.get(this.$store.state.apiUrl+'/employees', {
+      var response = await axios.get(this.$store.state.apiUrl+'/employees/active_employees', {
         headers: {
           Authorization: 'Bearer '+ this.$cookies.get('_t_hrm')
         }
