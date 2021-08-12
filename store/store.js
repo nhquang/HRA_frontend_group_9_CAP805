@@ -8,4 +8,4 @@ export const store = new Vuex.Store({
         loading: false,
         data: [],
     },
-});
+}); 
