@@ -110,9 +110,10 @@ export default {
           Authorization: 'Bearer '+ this.$cookies.get('_t_hrm')
         }
       });
-      console.log(response);
+      //console.log(response);
       if(response.hasOwnProperty('data')) {
-        this.list = [response.data];
+        if(response.data.length) this.list = response.data;
+        else this.list = [response.data];
       }
       this.$store.state.loading = false;
     }
