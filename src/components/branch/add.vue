@@ -93,7 +93,8 @@ export default {
               }
             });
             if(response.hasOwnProperty('data')) { 
-              this.name = ''; this.streetAddress = ''; this.city = ''; this.province = ''; this.country = ''; this.description = '';
+              // this.name = ''; this.streetAddress = ''; this.city = ''; this.province = ''; this.country = ''; this.description = '';
+              this.back();
             }
             this.$store.state.loading = false;
           }

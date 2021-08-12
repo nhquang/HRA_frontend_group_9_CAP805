@@ -61,7 +61,7 @@ export default {
             this.$cookies.set("_t_hrm", response.data.token);
             this.$cookies.set("_r_hrm", response.data.role);
             this.$cookies.set("_l_hrm", true);
-            window.location.reload();
+            window.location.reload(window.location.origin);
           }
           else {
             this.$toaster(response.data.message, 'danger');

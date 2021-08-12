@@ -60,11 +60,16 @@
             <div class="col-6 mb-2 pr-1">
               <label class="req">Role</label>
               <select id="role" v-model="role">
-                <option value="admin" selected>Admin</option>
-                <option value="hr_manager">HR Manager</option>
-                <option value="hr_staff">HR Staff</option>                
-                <option value="employee">Employee</option>                
-              </select>      
+                <option value="" selected>--Select--</option>
+                <option value="admin" v-if="current_user_role == 'admin'">Admin</option>
+                <option value="hr_manager" v-if="current_user_role == 'admin'">
+                  HR Manager
+                </option>
+                <option value="hr_staff" v-if="current_user_role != 'hr_staff'">
+                  HR Staff
+                </option>
+                <option value="employee">Employee</option>
+              </select>
             </div>
             <div class="col-6  mb-2 pl-1">
               <label class="req">Gender</label>
@@ -160,6 +165,7 @@ export default {
       activationCode: '',fname: '', lname: '', gender: '',username:'', role: '', hireDate: '', email: '',streetAddress: '',city: '',province:'',country:'',phone:'',stillEmployed:'',branchId: '', deparmentId:'',payInfo:{ frequency:'',bankAccountNumber:'',firstPayDate:'',salary:'',grossAmount:''},
       master_branches: [],
       master_departments: [],
+      current_user_role:""
     }
   },
   validators: {
@@ -263,6 +269,7 @@ export default {
 
   },
   async created() {
+    this.current_user_role = this.$cookies.get("_r_hrm");
     try {
       this.$store.state.loading = true;
 
@@ -277,7 +284,7 @@ export default {
         await this.getDepartmentDetails(response.data.deparmentId);
         await this.getDepartment();        
         
-        this.activationCode=response.data.username;
+        this.activationCode=response.data._id;
         this.fname=response.data.fname;
         this.lname=response.data.lname; 
         this.gender=response.data.gender;

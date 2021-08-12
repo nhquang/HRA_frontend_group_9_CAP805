@@ -99,7 +99,8 @@ export default {
               }
             });
             if(response.hasOwnProperty('data')) { 
-              this.branchId='';this.description='';this.name='';this.active='';
+              // this.branchId='';this.description='';this.name='';this.active='';
+              this.back();
             }
             this.$store.state.loading = false;
           }
