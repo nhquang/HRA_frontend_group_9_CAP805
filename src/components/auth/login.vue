@@ -14,7 +14,7 @@
             <label>Password</label>
             <input type="password" id="password" v-model="password"/>
           </div>
-          <a href="javascript:void(0)" class="link ml-auto mr-3" @click="$router.push('/forgot_password')">Forgot your password?</a>
+          <a href="javascript:void(0)" class="link ml-auto mr-3" @click="$router.push('/register')">Forgot your password?</a>
           <div class="col-12">
             <button class="full-button" @click="login()">LOGIN</button>
           </div>
