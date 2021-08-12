@@ -3,7 +3,8 @@
     <div class="sm-page-nav">
       <div class="row">
         <div class="col-6 px-2 my-auto">
-          <p>Edit Employee</p>
+          <p v-if="current_user_role != 'employee'">Edit Employee</p>
+          <p v-if="current_user_role == 'employee'">View Employee</p>
         </div>
         <div class="col-6 d-flex justify-content-end">
           <button class="btn" @click="back()">
@@ -223,12 +224,12 @@
               <label class="req">First Pay Date</label>
               <input type="date" id="payInfo_firstPayDate" v-model="payInfo.firstPayDate"/>
             </div>  
-            <!-- <div class="col-12 mb-2 px-2">  
+            <div class="col-12 mb-2 px-2">  
               <div class="d-flex">
                 <input type="checkbox" id="stillEmployed" class="w-auto my-auto mr-2" v-model="stillEmployed"/>                 
                 <label for="stillEmployed" class="my-auto"> Still Employee</label>            
               </div>            
-            </div> -->
+            </div>
           </div>
 
 
@@ -258,12 +259,12 @@
               <label class="req">First Pay Date</label>
               <input type="date" id="payInfo_firstPayDate" v-model="payInfo.firstPayDate" disabled/>
             </div>  
-            <!-- <div class="col-12 mb-2 px-2">  
+            <div class="col-12 mb-2 px-2">  
               <div class="d-flex">
-                <input type="checkbox" id="stillEmployed" class="w-auto my-auto mr-2" v-model="stillEmployed" />                 
+                <input type="checkbox" id="stillEmployed" class="w-auto my-auto mr-2" v-model="stillEmployed" disabled/>                 
                 <label for="stillEmployed" class="my-auto"> Still Employee</label>            
               </div>            
-            </div> -->
+            </div>
           </div>
 
 
@@ -289,7 +290,7 @@ export default {
   mixins: [formValidation],
   data() {
     return {
-      activationCode: '',fname: '', lname: '', gender: '', role: '', hireDate: '', email: '',streetAddress: '',city: '',province:'',country:'',phone:'',branchId: '', deparmentId:'',payInfo:{ frequency:'',bankAccountNumber:'',firstPayDate:'',salary:'',grossAmount:''},
+      activationCode: '',fname: '', lname: '', gender: '', role: '', hireDate: '', email: '',streetAddress: '',city: '',province:'', stillEmployed: false,country:'',phone:'',branchId: '', deparmentId:'',payInfo:{ frequency:'',bankAccountNumber:'',firstPayDate:'',salary:'',grossAmount:''},
       master_branches: [],
       master_departments: [],
       current_user_role:""
@@ -308,7 +309,7 @@ export default {
     province(value) { return this.validator.value(value).required(this.required('Province')); },
     country(value) { return this.validator.value(value).required(this.required('Country')); },
     phone(value) { return this.validator.value(value).required(this.required('Phone')); },
-    // stillEmployed(value) { return this.validator.value(value).required(this.required('Still Employed')); },
+    stillEmployed(value) { return this.validator.value(value).required(this.required('Still Employed')); },
     deparmentId(value) { return this.validator.value(value).required(this.required('DeparmentId')); },    
     payInfo(value) {
       this.validate('payInfo_frequency', this.validator.value(value.frequency).required(this.required('frequency')));
@@ -331,7 +332,7 @@ export default {
           try {
             this.$store.state.loading = true;
             var data = {
-              fname:this.fname, lname: this.lname, gender: this.gender, role: this.role, hireDate: this.hireDate, email: this.email,streetAddress: this.streetAddress,city: this.city,province:this.province,country:this.country,phone:this.phone,branchId: this.branchId, deparmentId:this.deparmentId,payInfo:{ frequency:this.payInfo.frequency,bankAccountNumber:this.payInfo.bankAccountNumber,firstPayDate:this.payInfo.firstPayDate,salary:this.payInfo.salary,grossAmount:this.payInfo.grossAmount}
+              fname:this.fname, lname: this.lname, gender: this.gender, role: this.role, stillEmployed: this.stillEmployed, hireDate: this.hireDate, email: this.email,streetAddress: this.streetAddress,city: this.city,province:this.province,country:this.country,phone:this.phone,branchId: this.branchId, deparmentId:this.deparmentId,payInfo:{ frequency:this.payInfo.frequency,bankAccountNumber:this.payInfo.bankAccountNumber,firstPayDate:this.payInfo.firstPayDate,salary:this.payInfo.salary,grossAmount:this.payInfo.grossAmount}
             }
             var response = await axios.put(this.$store.state.apiUrl+'/employees/update_employee/'+this.$route.params.id, data, {
               headers: {
@@ -424,7 +425,7 @@ export default {
         this.province=response.data.province;
         this.country=response.data.country;
         this.phone=response.data.phone;
-        // this.stillEmployed=response.data.stillEmployed;      
+        this.stillEmployed=response.data.stillEmployed;      
         this.deparmentId=response.data.deparmentId;
         this.payInfo.frequency=response.data.payInfo.frequency;
         this.payInfo.bankAccountNumber=response.data.payInfo.bankAccountNumber;

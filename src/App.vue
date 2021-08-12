@@ -17,7 +17,7 @@
           class="sm-nav-item"
           :class="selected_menu == 'branch' ? 'selected' : ''"
           @click="clickMenu('branch')"
-          v-if="role == 'admin'"
+          
         >
           <i class="fa fa-briefcase"></i><span>Branch</span>
         </a>
@@ -26,7 +26,7 @@
           class="sm-nav-item"
           :class="selected_menu == 'department' ? 'selected' : ''"
           @click="clickMenu('department')"
-          v-if="role == 'admin'"
+          
         >
           <i class="fa fa-building"></i><span>Department</span>
         </a>
