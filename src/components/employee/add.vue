@@ -30,10 +30,10 @@
               <label class="req">Last Name</label>
               <input type="text" id="lname" v-model="lname" />
             </div>
-            <div class="col-12 mb-2">
+            <!-- <div class="col-12 mb-2">
               <label class="req">User Name</label>
               <input type="text" id="username" v-model="username" />
-            </div>
+            </div> -->
             <div class="col-6 mb-2 pr-2">
               <label class="req">Email</label>
               <input type="email" id="email" v-model="email" />
@@ -207,7 +207,7 @@ export default {
       fname: "",
       lname: "",
       gender: "",
-      username: "",
+      //username: "",
       role: "",
       hireDate: "",
       email: "",
@@ -240,9 +240,9 @@ export default {
     lname(value) {
       return this.validator.value(value).required(this.required("Last Name"));
     },
-    username(value) {
-      return this.validator.value(value).required(this.required("User Name"));
-    },
+    // username(value) {
+    //   return this.validator.value(value).required(this.required("User Name"));
+    // },
     gender(value) {
       return this.validator.value(value).required(this.required("Gender"));
     },
@@ -327,7 +327,7 @@ export default {
               fname: this.fname,
               lname: this.lname,
               gender: this.gender,
-              username: this.username,
+              //username: this.username,
               role: this.role,
               hireDate: this.hireDate,
               email: this.email,
