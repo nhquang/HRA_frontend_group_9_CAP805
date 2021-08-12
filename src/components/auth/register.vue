@@ -83,17 +83,33 @@ export default {
             confirmPassword: this.confirmPassword,
             activationCode: this.activationCode,
           };
-          var response = await axios.post(
-            this.$store.state.apiUrl + "/register",
-            data
-          );
-          if (response.data.hasOwnProperty("message")) {
-            this.username = "";
-            this.password = "";
-            this.confirmPassword = "";
-            this.activationCode = "";
-            this.$router.push("/");
+          // var response = await axios.post(
+          //   this.$store.state.apiUrl + "/register",
+          //   data
+          // );
+          const response = await fetch(this.$store.state.apiUrl + "/register", {
+            method:'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+          });
+          // if(response.errors){
+          //   console.log(response);
+          // }
+          // if (response.data.hasOwnProperty("message")) {
+          //   this.username = "";
+          //   this.password = "";
+          //   this.confirmPassword = "";
+          //   this.activationCode = "";
+          //   this.$router.push("/");
+          // }
+          if(response.status === 400){
+            const err = {status: response.status, data:{message:"Username exists or activation code is invalid"}}
+            throw { response: err };
           }
+          this.$router.push("/");
           this.$store.state.loading = false;
         } catch (error) {
           this.$errorHandling(error);
