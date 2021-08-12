@@ -6,7 +6,7 @@
           <p>Employee</p>
         </div>
         <div class="col-6 d-flex justify-content-end">
-          <button class="btn" @click="addEmployee()">
+          <button class="btn" @click="addEmployee()" v-if="current_user_role != 'employee'">
             <i class="fa fa-plus-circle"></i>
             <span>Add</span>
           </button>
@@ -36,9 +36,10 @@
               <td>{{ displayDate(item.hireDate) }}</td>
               <td>{{ item.role }}</td>
               <td class="text-right">
-                <a href="javascript:void(0)" class="px-2 text-success" @click="editEmployee(item._id)">Edit</a>
-                <span>|</span>                
-                <a href="javascript:void(0)" class="px-2 text-danger" @click="deleteEmployee(item._id, index)">Delete</a>
+                <a href="javascript:void(0)" class="px-2 text-success" @click="editEmployee(item._id)" v-if="current_user_role != 'employee'">Edit</a>
+                <a href="javascript:void(0)" class="px-2 text-success" @click="editEmployee(item._id)" v-if="current_user_role == 'employee'">View</a>
+                <span v-if="current_user_role != 'employee'">|</span>                
+                <a href="javascript:void(0)" class="px-2 text-danger" @click="deleteEmployee(item._id, index)" v-if="current_user_role != 'employee'">Delete</a>
               </td>
             </tr>
           </tbody>
@@ -97,6 +98,7 @@ export default {
     }
   },
   async created() {
+    this.current_user_role = this.$cookies.get("_r_hrm");
     try {
       this.$store.state.loading = true;
       var response = await axios.get(this.$store.state.apiUrl+'/employees/active_employees', {

@@ -35,7 +35,7 @@
           class="sm-nav-item"
           :class="selected_menu == 'employee' ? 'selected' : ''"
           @click="clickMenu('employee')"
-          v-if="role != 'employee'"
+          
         >
           <i class="fa fa-user"></i><span>Employee</span>
         </a>
