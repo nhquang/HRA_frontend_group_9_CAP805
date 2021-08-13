@@ -16,11 +16,11 @@
           </div>   
           <div class="col-12 mb-2 px-2">
             <label class="req">Password</label>
-            <input type="text" id="password" v-model="password" placeholder="Enter new password here"/>         
+            <input type="password" id="password" v-model="password" placeholder="Enter new password here"/>         
           </div>
           <div class="col-12 mb-2 px-2">
             <label class="req">Confirm Password</label>
-            <input type="text" id="confirmPassword" v-model="confirmPassword" placeholder="Enter confirm password here"/>         
+            <input type="password" id="confirmPassword" v-model="confirmPassword" placeholder="Enter confirm password here"/>         
           </div>        
         </div>
 
