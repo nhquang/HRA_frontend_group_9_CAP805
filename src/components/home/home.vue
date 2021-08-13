@@ -74,18 +74,36 @@ export default {
             var data = {
               username :this.name, password:this.password, confirmPassword:this.confirmPassword
             }
-            var response = await axios.post(this.$store.state.apiUrl+'/account/update_account', data, {
-              headers: {
-                Authorization: 'Bearer '+ this.$cookies.get('_t_hrm')
-              }
+            // var response = await axios.post(this.$store.state.apiUrl+'/account/update_account', data, {
+            //   headers: {
+            //     Authorization: 'Bearer '+ this.$cookies.get('_t_hrm')
+            //   }
+            // });
+
+            const response = await fetch(this.$store.state.apiUrl+'/account/update_account', {
+                method:'POST',
+                headers: {
+                  'Authorization': 'Bearer '+ this.$cookies.get('_t_hrm'),
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
             });
+            // console.log(response);
+            // if(response.hasOwnProperty('data')) {
+            //   this.$store.state.loading = false;
+            //   this.$toaster(response.data.message);
+            // }else{
+            //   this.$toaster(response.data.message, 'danger')
+            // }
             console.log(response);
-            if(response.hasOwnProperty('data')) {
-              this.$store.state.loading = false;
-              this.$toaster(response.data.message);
-            }else{
-              this.$toaster(response.data.message, 'danger')
+            const parsed = await response.json();
+            if(response.status !== 200){
+              const err = {status: response.status, data:{ message:parsed.message }};
+              throw { response: err };
             }
+            this.$toaster(parsed.message);
+            this.$store.state.loading = false;
           }
           catch(error) {
             this.$errorHandling(error);
