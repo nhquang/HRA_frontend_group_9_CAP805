@@ -69,7 +69,7 @@
     <div class="sm-page-footer">
       <div class="row">
         <div class="col-12  my-auto">                  
-          <button class="btn save-btn" @click="edit()">
+          <button class="btn save-btn" @click="edit()" v-if="role=='admin'">
             <i class="fa fa-check"></i>
             <span>Update</span>
           </button>
