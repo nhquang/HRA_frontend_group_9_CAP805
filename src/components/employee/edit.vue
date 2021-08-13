@@ -3,8 +3,8 @@
     <div class="sm-page-nav">
       <div class="row">
         <div class="col-6 px-2 my-auto">
-          <p v-if="current_user_role != 'employee'">Edit Employee</p>
-          <p v-if="current_user_role == 'employee'">View Employee</p>
+          <p v-if="current_user_role == 'admin' || (current_user_role != 'employee' && current_user_role != role)">Edit Employee</p>
+          <p v-else>View Employee</p>
         </div>
         <div class="col-6 d-flex justify-content-end">
           <button class="btn" @click="back()">
@@ -17,7 +17,7 @@
     <div class="sm-page-body">   
       <div class="row mx-2">
         <div class="col-lg-6 col-xl-4 col-md-6 col-sm-12 p-0">
-          <div class="row sm-page-block mx-2" v-if="current_user_role != 'employee'">
+          <div class="row sm-page-block mx-2" v-if="current_user_role == 'admin' || (current_user_role != 'employee' && current_user_role != role)">
             <div class="title">General Information</div>
             <div class="col-12 mb-2">
               <label class="req">Activation Code</label>
@@ -87,7 +87,8 @@
           </div>
 
 
-          <div class="row sm-page-block mx-2" v-if="current_user_role == 'employee'">
+          <!-- <div class="row sm-page-block mx-2" v-if="current_user_role == 'employee'"> -->
+            <div class="row sm-page-block mx-2" v-else>
             <div class="title">General Information</div>
             <div class="col-12 mb-2">
               <label class="req">Activation Code</label>
@@ -132,11 +133,11 @@
               <label class="req">Role</label>
               <select id="role" v-model="role" disabled>
                 <option value="" selected>--Select--</option>
-                <option value="admin" v-if="current_user_role == 'admin'">Admin</option>
-                <option value="hr_manager" v-if="current_user_role == 'admin'">
+                <option value="admin">Admin</option>
+                <option value="hr_manager" >
                   HR Manager
                 </option>
-                <option value="hr_staff" v-if="current_user_role != 'hr_staff'">
+                <option value="hr_staff" >
                   HR Staff
                 </option>
                 <option value="employee">Employee</option>
@@ -157,7 +158,7 @@
           </div>
         </div>
         <div class="col-lg-6 col-xl-4 col-md-6 col-sm-12 p-0">
-          <div class="row sm-page-block mx-2" v-if="current_user_role != 'employee'">
+          <div class="row sm-page-block mx-2" v-if="current_user_role == 'admin' || (current_user_role != 'employee' && current_user_role != role)">
             <div class="title">Address</div>
             <div class="col-12 mb-2 px-2">
               <label class="req">Street Address</label>
@@ -177,7 +178,7 @@
             </div>
           </div>
 
-          <div class="row sm-page-block mx-2" v-if="current_user_role == 'employee'">
+          <div class="row sm-page-block mx-2" v-else>
             <div class="title">Address</div>
             <div class="col-12 mb-2 px-2">
               <label class="req">Street Address</label>
@@ -198,7 +199,7 @@
           </div>
         </div>
         <div class="col-lg-6 col-xl-4 col-md-6 col-sm-12 p-0">
-          <div class="row sm-page-block mx-2" v-if="current_user_role != 'employee'">            
+          <div class="row sm-page-block mx-2" v-if="current_user_role == 'admin' || (current_user_role != 'employee' && current_user_role != role)">            
             <div class="title">Pay Info</div>
             <div class="w-100"></div>
             <div class="col-6 mb-2 px-2">
@@ -233,7 +234,7 @@
           </div>
 
 
-          <div class="row sm-page-block mx-2" v-if="current_user_role == 'employee'">            
+          <div class="row sm-page-block mx-2" v-else>            
             <div class="title">Pay Info</div>
             <div class="w-100"></div>
             <div class="col-6 mb-2 px-2">
@@ -274,7 +275,7 @@
     <div class="sm-page-footer">
       <div class="row">
         <div class="col-12  my-auto">                  
-          <button class="btn save-btn" @click="edit()" v-if="current_user_role != 'employee'">
+          <button class="btn save-btn" @click="edit()" v-if="current_user_role == 'admin' || (current_user_role != 'employee' && current_user_role != role)">
             <i class="fa fa-check"></i>
             <span>Update</span>
           </button>

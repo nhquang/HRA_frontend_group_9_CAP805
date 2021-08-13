@@ -35,12 +35,17 @@
               <td>{{ item.email }}</td>
               <td>{{ displayDate(item.hireDate) }}</td>
               <td>{{ item.role }}</td>
-              <td class="text-right" v-if="current_user_role != 'employee'">
+              <td class="text-right" v-if="current_user_role == 'admin' ">
                 <a href="javascript:void(0)" class="px-2 text-success" @click="editEmployee(item._id)">Edit</a>
                 <span v-if="item.stillEmployed">|</span>                
                 <a href="javascript:void(0)" class="px-2 text-danger" @click="deleteEmployee(item._id, index)" v-if="item.stillEmployed">Deactivate</a>
               </td>
-              <td class="text-right" v-if="current_user_role == 'employee'">
+              <td class="text-right" v-else-if="current_user_role != 'employee' && current_user_role != item.role">
+                <a href="javascript:void(0)" class="px-2 text-success" @click="editEmployee(item._id)">Edit</a>
+                <span v-if="item.stillEmployed">|</span>                
+                <a href="javascript:void(0)" class="px-2 text-danger" @click="deleteEmployee(item._id, index)" v-if="item.stillEmployed">Deactivate</a>
+              </td>
+              <td class="text-right" v-else >
                 <a href="javascript:void(0)" class="px-2 text-success" @click="editEmployee(item._id)">View</a>
               </td>
             </tr>
