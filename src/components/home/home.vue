@@ -12,15 +12,15 @@
         <div class="row sm-page-block">
            <div class="col-12 mb-2 px-2">
             <label class="req">Username</label>
-            <input type="text" id="name" v-model="name"/>
+            <input type="text" id="name" v-model="name" />
           </div>   
           <div class="col-12 mb-2 px-2">
             <label class="req">Password</label>
-            <input type="text" id="password" v-model="password"/>         
+            <input type="text" id="password" v-model="password" placeholder="enter password here"/>         
           </div>
           <div class="col-12 mb-2 px-2">
             <label class="req">Confirm Password</label>
-            <input type="text" id="confirmPassword" v-model="confirmPassword"/>         
+            <input type="text" id="confirmPassword" v-model="confirmPassword" placeholder="enter password here"/>         
           </div>        
         </div>
 
@@ -64,7 +64,6 @@ export default {
     },
   
   async edit(){
-
     this.resetFormError();
       var confirm = await this.$confirm('Are you sure to update?');
       if(confirm) { 
@@ -86,7 +85,6 @@ export default {
               this.$toaster(response.data.message);
             }else{
               this.$toaster(response.data.message, 'danger')
-
             }
           }
           catch(error) {
@@ -98,9 +96,7 @@ export default {
         }
       }
     
-
-
-  },
+  }},
   async created(){
     try {
       this.$store.state.loading = true;
@@ -117,6 +113,6 @@ export default {
       this.$errorHandling(error);
     }
   }
-}
+
 }
 </script>
