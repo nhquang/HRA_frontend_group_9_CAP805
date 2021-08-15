@@ -12,7 +12,7 @@
                 <option v-for="(item, index) in master_branches" :key="index" :value="item._id">{{ item.name }}</option>
               </select>      
             </div>
-          <button class="btn" @click="addDepartment()">
+          <button class="btn" @click="addDepartment()" v-if="role=='admin'">
             <i class="fa fa-plus-circle"></i>
             <span>Add</span>
           </button>
@@ -39,10 +39,13 @@
               <td>{{ item.name }}</td>
               <!-- <td>{{ item.branchId }}</td> -->
               <td>{{ item.description }}</td>
-              <td class="text-right">
+              <td class="text-right" v-if="role=='admin'">
                 <a href="javascript:void(0)" class="px-2 text-success" @click="editDepartment(item._id)">Edit</a>
-                <span>|</span>                
-                <a href="javascript:void(0)" class="px-2 text-danger" @click="deleteDepartment(item._id, index)">Delete</a>
+                <span v-if="item.active">|</span>                
+                <a href="javascript:void(0)" class="px-2 text-danger" @click="deleteDepartment(item._id, index)" v-if="item.active">Deactivate</a>
+              </td>
+              <td class="text-right" v-if="role!='admin'">
+                <a href="javascript:void(0)" class="px-2 text-success" @click="editDepartment(item._id)">View</a>
               </td>
             </tr>        
           </tbody>
@@ -63,7 +66,7 @@ export default {
   },
   methods: {
     async getBranch(){
-      var response = await axios.get(this.$store.state.apiUrl+"/branches", {
+      var response = await axios.get(this.$store.state.apiUrl+"/branches/active_branches", {
         headers: {
           Authorization: 'Bearer '+ this.$cookies.get('_t_hrm')
         }
@@ -84,6 +87,7 @@ export default {
       if(confirm) { 
         try {
           this.$store.state.loading = true;
+          
           var response = await axios.delete(this.$store.state.apiUrl+'/departments/'+id, {
             headers: {
               Authorization: 'Bearer '+ this.$cookies.get('_t_hrm')
@@ -92,8 +96,11 @@ export default {
           if(response.hasOwnProperty('data')) {
             if(response.data.hasOwnProperty('message') && response.data.message != '') {
               this.$toaster(response.data.message);
+              
             }
-            this.$delete(this.list, index);
+            this.list[index].active = false;
+            this.$forceUpdate();
+            //this.$delete(this.list, index);
           }
           this.$store.state.loading = false;
         }
@@ -103,7 +110,7 @@ export default {
       }
     },
     async getBranchDepartment(){
-      var response = await axios.get(this.$store.state.apiUrl+'/departments?branchId='+this.branchId, {
+      var response = await axios.get(this.$store.state.apiUrl+'/departments/all?branchId='+this.branchId, {
         headers: {
           Authorization: 'Bearer '+ this.$cookies.get('_t_hrm')
         }
@@ -114,10 +121,11 @@ export default {
     }
   },
   async created() {
+    this.role = this.$cookies.get("_r_hrm");
     try {
       this.$store.state.loading = true;
       await this.getBranch();
-      var response = await axios.get(this.$store.state.apiUrl+'/departments?branchId='+this.branchId, {
+      var response = await axios.get(this.$store.state.apiUrl+'/departments/all?branchId='+this.branchId, {
         headers: {
           Authorization: 'Bearer '+ this.$cookies.get('_t_hrm')
         }

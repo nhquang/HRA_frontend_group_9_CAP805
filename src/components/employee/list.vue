@@ -6,7 +6,7 @@
           <p>Employee</p>
         </div>
         <div class="col-6 d-flex justify-content-end">
-          <button class="btn" @click="addEmployee()">
+          <button class="btn" @click="addEmployee()" v-if="current_user_role != 'employee'">
             <i class="fa fa-plus-circle"></i>
             <span>Add</span>
           </button>
@@ -35,10 +35,18 @@
               <td>{{ item.email }}</td>
               <td>{{ displayDate(item.hireDate) }}</td>
               <td>{{ item.role }}</td>
-              <td class="text-right">
+              <td class="text-right" v-if="current_user_role == 'admin' ">
                 <a href="javascript:void(0)" class="px-2 text-success" @click="editEmployee(item._id)">Edit</a>
-                <span>|</span>                
-                <a href="javascript:void(0)" class="px-2 text-danger" @click="deleteEmployee(item._id, index)">Delete</a>
+                <span v-if="item.stillEmployed">|</span>                
+                <a href="javascript:void(0)" class="px-2 text-danger" @click="deleteEmployee(item._id, index)" v-if="item.stillEmployed">Deactivate</a>
+              </td>
+              <td class="text-right" v-else-if="current_user_role != 'employee' && current_user_role != item.role">
+                <a href="javascript:void(0)" class="px-2 text-success" @click="editEmployee(item._id)">Edit</a>
+                <span v-if="item.stillEmployed">|</span>                
+                <a href="javascript:void(0)" class="px-2 text-danger" @click="deleteEmployee(item._id, index)" v-if="item.stillEmployed">Deactivate</a>
+              </td>
+              <td class="text-right" v-else >
+                <a href="javascript:void(0)" class="px-2 text-success" @click="editEmployee(item._id)">View</a>
               </td>
             </tr>
           </tbody>
@@ -67,6 +75,7 @@ export default {
       if(confirm) { 
         try {
           this.$store.state.loading = true;
+          this.list[index].stillEmployed = false;
           var response = await axios.delete(this.$store.state.apiUrl+'/employees/delete_employee/'+id, {
             headers: {
               Authorization: 'Bearer '+ this.$cookies.get('_t_hrm')
@@ -76,8 +85,9 @@ export default {
             if(response.data.hasOwnProperty('message') && response.data.message != '') {
               this.$toaster(response.data.message);
             }
-            this.$delete(this.list, index);
+            //this.$delete(this.list, index);
           }
+          this.$forceUpdate();
           this.$store.state.loading = false;
         }
         catch(error) {
@@ -97,15 +107,18 @@ export default {
     }
   },
   async created() {
+    this.current_user_role = this.$cookies.get("_r_hrm");
     try {
       this.$store.state.loading = true;
-      var response = await axios.get(this.$store.state.apiUrl+'/employees/active_employees', {
+      var response = await axios.get(this.$store.state.apiUrl+'/employees', {
         headers: {
           Authorization: 'Bearer '+ this.$cookies.get('_t_hrm')
         }
       });
+      //console.log(response);
       if(response.hasOwnProperty('data')) {
-        this.list = response.data;
+        if(response.data.length) this.list = response.data;
+        else this.list = [response.data];
       }
       this.$store.state.loading = false;
     }

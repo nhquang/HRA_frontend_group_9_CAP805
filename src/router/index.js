@@ -5,7 +5,7 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/",
+    path: "/login",
     name: "Login",
     component: function() {
       return import("../components/auth/login.vue");
@@ -26,7 +26,7 @@ const routes = [
     },
   },
   {
-    path: "/home",
+    path: "/",
     name: "Home",
     component: function() {
       return import("../components/home/home.vue");

@@ -5,7 +5,7 @@
         <div class="col-6 px-2 my-auto">
           <p>Branch</p>
         </div>
-        <div class="col-6 d-flex justify-content-end">
+        <div class="col-6 d-flex justify-content-end" v-if="role=='admin'">
           <button class="btn" @click="addBranch()">
             <i class="fa fa-plus-circle"></i>
             <span>Add</span>
@@ -37,10 +37,13 @@
               <td>{{ item.province }}</td>
               <td>{{ item.country }}</td>
               <td>{{ item.description }}</td>
-              <td class="text-right">
+              <td class="text-right" v-if="role == 'admin'">
                 <a href="javascript:void(0)" class="px-2 text-success" @click="editBranch(item._id)">Edit</a>
-                <span>|</span>                
-                <a href="javascript:void(0)" class="px-2 text-danger" @click="deleteBranch(item._id, index)">Delete</a>
+                <span v-if="item.active">|</span>                
+                <a href="javascript:void(0)" class="px-2 text-danger" @click="deleteBranch(item._id, index)" v-if="item.active">Deactivate</a>
+              </td>
+              <td class="text-right" v-if="role != 'admin'">
+                <a href="javascript:void(0)" class="px-2 text-success" @click="editBranch(item._id)">View</a>
               </td>
             </tr>          
           </tbody>
@@ -78,7 +81,9 @@ export default {
             if(response.data.hasOwnProperty('message') && response.data.message != '') {
               this.$toaster(response.data.message);
             }
-            this.$delete(this.list, index);
+            this.list[index].active = false;
+            this.$forceUpdate();
+            //this.$delete(this.list, index);
           }
           this.$store.state.loading = false;
         }
@@ -90,6 +95,7 @@ export default {
   },
   async created() {
     try {
+      this.role = this.$cookies.get("_r_hrm");
       this.$store.state.loading = true;
       var response = await axios.get(this.$store.state.apiUrl+'/branches', {
         headers: {

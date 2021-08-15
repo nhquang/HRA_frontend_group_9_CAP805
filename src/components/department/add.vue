@@ -73,7 +73,7 @@ export default {
       this.$router.push('/department');
     },
     async getBranch(){
-      var response = await axios.get(this.$store.state.apiUrl+"/branches", {
+      var response = await axios.get(this.$store.state.apiUrl+"/branches/active_branches", {
         headers: {
           Authorization: 'Bearer '+ this.$cookies.get('_t_hrm')
         }
@@ -99,7 +99,8 @@ export default {
               }
             });
             if(response.hasOwnProperty('data')) { 
-              this.branchId='';this.description='';this.name='';this.active='';
+              // this.branchId='';this.description='';this.name='';this.active='';
+              this.back();
             }
             this.$store.state.loading = false;
           }

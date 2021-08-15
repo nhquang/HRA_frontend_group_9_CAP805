@@ -3,7 +3,8 @@
     <div class="sm-page-nav">
       <div class="row">
         <div class="col-6 px-2 my-auto">
-          <p>Edit Department</p>
+          <p v-if="role=='admin'">Edit Department</p>
+          <p v-if="role!='admin'">View Department</p>
         </div>
         <div class="col-6 d-flex justify-content-end">
           <button class="btn" @click="back()">
@@ -15,7 +16,7 @@
     </div>
     <div class="sm-page-body">     
       <div class="col-lg-6 col-xl-4 col-md-6 col-sm-12 p-0">
-        <div class="row sm-page-block">
+        <div class="row sm-page-block" v-if="role=='admin'">
           <div class="col-12 mb-2 px-2">
             <label class="req">Department Name</label>
             <input type="text" id="name" v-model="name"/>
@@ -38,12 +39,37 @@
               </div>            
             </div>
         </div>
+
+        <div class="row sm-page-block" v-if="role!='admin'">
+          <div class="col-12 mb-2 px-2">
+            <label class="req">Department Name</label>
+            <input type="text" id="name" v-model="name" disabled/>
+          </div>
+          <div class="col-12 mb-2 px-2">
+            <label class="req">Branch</label>
+            <select v-model="branchId" id="branchId" disabled>
+                <option value="">--Select--</option>
+                <option v-for="(item, index) in master_branches" :key="index" :value="item._id">{{ item.name }}</option>
+            </select>      
+          </div>
+          <div class="col-12 mb-2 px-2">
+            <label>Description</label>
+            <textarea cols="30" rows="5" id="description" v-model="description" disabled></textarea>          
+          </div>
+          <div class="col-12 mb-2 px-2">  
+              <div class="d-flex">
+                <input type="checkbox" id="active" class="w-auto my-auto mr-2" v-model="active" disabled/>                 
+                <label for="active" class="my-auto"> Active</label>            
+              </div>            
+            </div>
+        </div>
+
       </div>
     </div>
     <div class="sm-page-footer">
       <div class="row">
         <div class="col-12  my-auto">                  
-          <button class="btn save-btn" @click="edit()">
+          <button class="btn save-btn" @click="edit()" v-if="role=='admin'">
             <i class="fa fa-check"></i>
             <span>Update</span>
           </button>
@@ -115,6 +141,7 @@ export default {
   },
   async created() {
     await this.getBranch();
+    this.role = this.$cookies.get("_r_hrm");
     try {
       this.$store.state.loading = true;
       var response = await axios.get(this.$store.state.apiUrl+'/departments/'+this.$route.params.id, {

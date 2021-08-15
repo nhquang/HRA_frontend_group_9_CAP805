@@ -14,7 +14,7 @@
             <label>Password</label>
             <input type="password" id="password" v-model="password"/>
           </div>
-          <a href="javascript:void(0)" class="link ml-auto mr-3" @click="$router.push('/forgot_password')">Forgot your password?</a>
+          <a href="javascript:void(0)" class="link ml-auto mr-3" @click="$router.push('/register')">Forgot your password?</a>
           <div class="col-12">
             <button class="full-button" @click="login()">LOGIN</button>
           </div>
@@ -61,7 +61,7 @@ export default {
             this.$cookies.set("_t_hrm", response.data.token);
             this.$cookies.set("_r_hrm", response.data.role);
             this.$cookies.set("_l_hrm", true);
-            window.location.reload();
+            window.location.reload(window.location.origin);
           }
           else {
             this.$toaster(response.data.message, 'danger');

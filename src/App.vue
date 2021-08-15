@@ -8,17 +8,35 @@
           </a>
         </div>
         <div class="menu-logo-block">
-          <a href="javascript:void(0)" @click="clickMenu('home')">
-            <img src="@/assets/images/hrm-logo.png" alt="hrm logo"/>
+          <a href="javascript:void(0)" @click="clickMenu('')">
+            <img src="@/assets/images/hrm-logo.png" alt="hrm logo" />
           </a>
-        </div>        
-        <a href="javascript:void(0)" class="sm-nav-item" :class="selected_menu == 'branch' ? 'selected' : ''" @click="clickMenu('branch')" v-if="role == 'admin'">
+        </div>
+        <a
+          href="javascript:void(0)"
+          class="sm-nav-item"
+          :class="selected_menu == 'branch' ? 'selected' : ''"
+          @click="clickMenu('branch')"
+          
+        >
           <i class="fa fa-briefcase"></i><span>Branch</span>
         </a>
-        <a href="javascript:void(0)" class="sm-nav-item" :class="selected_menu == 'department' ? 'selected' : ''" @click="clickMenu('department')" v-if="role == 'admin'">
+        <a
+          href="javascript:void(0)"
+          class="sm-nav-item"
+          :class="selected_menu == 'department' ? 'selected' : ''"
+          @click="clickMenu('department')"
+          
+        >
           <i class="fa fa-building"></i><span>Department</span>
         </a>
-        <a href="javascript:void(0)" class="sm-nav-item" :class="selected_menu == 'employee' ? 'selected' : ''" @click="clickMenu('employee')" v-if="role != 'employee'">
+        <a
+          href="javascript:void(0)"
+          class="sm-nav-item"
+          :class="selected_menu == 'employee' ? 'selected' : ''"
+          @click="clickMenu('employee')"
+          
+        >
           <i class="fa fa-user"></i><span>Employee</span>
         </a>
         <div class="nav-bottom">
@@ -40,8 +58,8 @@ export default {
   data() {
     return {
       isLogin: false,
-      selected_menu: '',
-      role:'',
+      selected_menu: "",
+      role: "",
     };
   },
   methods: {
@@ -55,37 +73,42 @@ export default {
       }
     },
     clickMenu(key) {
-      if(this.selected_menu != key) {
+      if (this.selected_menu != key) {
         this.selected_menu = key;
-        this.$router.push('/'+key); 
-      } 
+        this.$router.push("/" + key);
+      }
     },
     logout() {
       this.$cookies.remove("_l_hrm");
       this.$cookies.remove("_t_hrm");
       this.$cookies.remove("_r_hrm");
       window.location.reload();
-    }
+    },
   },
   created() {
-    this.isLogin = this.$cookies.isKey("_l_hrm") && this.$cookies.get("_l_hrm") && this.$cookies.isKey("_r_hrm") && this.$cookies.isKey("_t_hrm") ? true : false;
-    if(this.isLogin) {
-      this.role = this.$cookies.get('_r_hrm');      
-      this.$router.push('/home');
-    }
-    else {
-      this.$router.push('/');
+    this.isLogin =
+      this.$cookies.isKey("_l_hrm") &&
+      this.$cookies.get("_l_hrm") &&
+      this.$cookies.isKey("_r_hrm") &&
+      this.$cookies.isKey("_t_hrm")
+        ? true
+        : false;
+    if (this.isLogin) {
+      this.role = this.$cookies.get("_r_hrm");
+      this.$router.push("/");
+    } else {
+      this.$router.push("/login");
     }
   },
   mounted() {
-    this.$root.$on('bv::modal::shown', () => {  
-        var el = document.querySelectorAll('.btn-alert').length - 1;
-        var focusElement = document.querySelectorAll('.btn-alert')[el];
-        setTimeout(() => {
-            focusElement.focus();
-        },0)
+    this.$root.$on("bv::modal::shown", () => {
+      var el = document.querySelectorAll(".btn-alert").length - 1;
+      var focusElement = document.querySelectorAll(".btn-alert")[el];
+      setTimeout(() => {
+        focusElement.focus();
+      }, 0);
     });
-  }
+  },
 };
 </script>
 <style>
